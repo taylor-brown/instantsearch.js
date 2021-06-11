@@ -28,11 +28,17 @@ type DummySearchClientV4 = {
 
 type DefaultSearchClient = ReturnType<typeof algoliasearch>;
 
-export type SearchClient = {
-  search: DefaultSearchClient['search'];
-  searchForFacetValues: DefaultSearchClient['searchForFacetValues'];
+export type SearchClient = Pick<
+  DefaultSearchClient,
+  'search' | 'searchForFacetValues'
+> & {
   addAlgoliaAgent?: DefaultSearchClient['addAlgoliaAgent'];
-  initIndex?: DefaultSearchClient['initIndex'];
+  // only findAnswers is required
+  initIndex?: (
+    ...args: Parameters<DefaultSearchClient['initIndex']>
+  ) => Partial<
+    Pick<ReturnType<DefaultSearchClient['initIndex']>, 'findAnswers'>
+  >;
 };
 
 export type MultiResponse<THit = any> = {
