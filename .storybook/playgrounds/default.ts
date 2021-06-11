@@ -1,6 +1,4 @@
-import instantsearch from '../../src/index';
-import { panel, numericMenu, hits } from '../../src/widgets';
-import { createInsightsMiddleware } from '../../src/middlewares';
+import { Playground } from '../decorators';
 
 export const hitsItemTemplate = `
 <div
@@ -22,19 +20,16 @@ export const hitsItemTemplate = `
 </article>
 `;
 
-function instantSearchPlayground({
+const instantSearchPlayground: Playground = function instantSearchPlayground({
   search,
+  instantsearch,
   leftPanel,
   rightPanel,
-}: {
-  search: any;
-  leftPanel: HTMLElement;
-  rightPanel: HTMLElement;
 }) {
   const refinementList = document.createElement('div');
   leftPanel.appendChild(refinementList);
 
-  const brandList = panel({
+  const brandList = instantsearch.widgets.panel({
     templates: {
       header: 'Brands',
     },
@@ -50,7 +45,9 @@ function instantSearchPlayground({
   const numericMenuContainer = document.createElement('div');
   leftPanel.appendChild(numericMenuContainer);
 
-  const priceMenu = panel({ templates: { header: 'Price' } })(numericMenu);
+  const priceMenu = instantsearch.widgets.panel({
+    templates: { header: 'Price' },
+  })(instantsearch.widgets.numericMenu);
 
   search.addWidgets([
     priceMenu({
@@ -69,7 +66,7 @@ function instantSearchPlayground({
   const ratingMenu = document.createElement('div');
   leftPanel.appendChild(ratingMenu);
 
-  const ratingList = panel({
+  const ratingList = instantsearch.widgets.panel({
     templates: {
       header: 'Rating',
     },
@@ -108,7 +105,7 @@ function instantSearchPlayground({
   rightPanel.appendChild(hitsElement);
 
   search.addWidgets([
-    hits({
+    instantsearch.widgets.hits({
       container: hitsElement,
       templates: {
         item: hitsItemTemplate,
@@ -128,13 +125,13 @@ function instantSearchPlayground({
     }),
   ]);
 
-  const insights = createInsightsMiddleware({
+  const insights = instantsearch.middlewares.createInsightsMiddleware({
     insightsClient: null,
     onEvent: props => {
       console.log('insights onEvent', props);
     },
   });
   search.use(insights);
-}
+};
 
 export default instantSearchPlayground;
