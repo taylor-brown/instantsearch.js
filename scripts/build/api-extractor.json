@@ -26,12 +26,12 @@
         "addToApiReportFile": true
       },
 
-      "ae-internal-missing-underscore": {
+      "ae-missing-release-tag": {
         "logLevel": "none"
       },
 
-      "ae-missing-release-tag": {
-        "logLevel": "none"
+      "ae-forgotten-export": {
+        "logLevel": "warning"
       }
     },
 
@@ -41,7 +41,10 @@
       }
     }
   },
-  "mainEntryPointFilePath": "es/index.d.ts",
+
+  "projectFolder": "../..",
+  "mainEntryPointFilePath": "<projectFolder>/es/index.d.ts",
+
   "dtsRollup": {
     "enabled": false
   }
